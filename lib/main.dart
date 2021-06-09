@@ -29,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<String> names = <String>[];
+  final List<String> names = <String>[''];
 
   TextEditingController nameController = TextEditingController();
 
@@ -54,29 +54,68 @@ class _MyHomePageState extends State<MyHomePage> {
           itemCount: names.length,
           itemBuilder: (context, index) {
             if (index == 0) {
-            // return the header
-            return new Column(
-              children: [Text('Current Todos:')],
+              // return the header
+              return new Column(
+                children: [Text('Current Todos:')],
+              );
+            }
+            index -= 1;
+            final item = names[index];
+            return Dismissible(
+              key: Key(item),
+              onDismissed: (direction) {
+                if (direction == DismissDirection.startToEnd) {
+                  print("Add to Done");
+                  setState(() {
+                    names.removeAt(index);
+                  });
+                } else {
+                  setState(() {
+                    names.removeAt(index);
+                  });
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text('$item dismissed')));
+                }
+              },
+              background: new Container(
+                  padding: EdgeInsets.only(right: 20.0),
+                  color: Colors.green,
+                  child: new Align(
+                    alignment: Alignment.centerLeft,
+                    child: new Text('Add to Done',
+                        textAlign: TextAlign.right,
+                        style: new TextStyle(color: Colors.white)),
+                  )),
+              secondaryBackground: new Container(
+                padding: EdgeInsets.only(right: 20.0),
+                color: Colors.red,
+                child: Align(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        " Delete",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.right,
+                      ),
+                      Icon(
+                        Icons.delete_outline_rounded,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                  alignment: Alignment.centerRight,
+                ),
+              ),
+              child: ListTile(title: Text('$item')),
             );
-        }
-        index -= 1;
-  final item = names[index];
-  return Dismissible(
-    key: Key(item),
-    onDismissed: (direction) {
-      if (direction == DismissDirection.startToEnd){
-        print("Add to Done");
-      } else {
-      setState(() {
-        names.removeAt(index);
-      });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('$item dismissed')));
-    }},
-    background: Container(color: Colors.red),
-    child: ListTile(title: Text('$item')),
-  );
-}),
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
