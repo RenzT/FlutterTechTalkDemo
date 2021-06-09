@@ -29,27 +29,28 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  final List<String> names = <String>['Aby', 'Aish', 'Ayan', 'Ben', 'Bob', 'Charlie', 'Cook', 'Carline'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView(
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.map),
-              title: Text('Map'),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: names.length,
+        itemBuilder: (BuildContext context, int index){
+          return Container(
+            height: 50,
+            margin: EdgeInsets.all(2),
+            child: Center(
+              child: Text('${names[index]}',
+                style: TextStyle(fontSize: 18),
+              )
             ),
-            ListTile(
-              leading: Icon(Icons.photo_album),
-              title: Text('Album'),
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('Phone'),
-            ),
-          ],
+          );
+        }
         ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
