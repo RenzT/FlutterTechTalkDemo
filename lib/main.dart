@@ -29,18 +29,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<String> names = <String>[''];
+  final List<String> todos = <String>[''];
+  final List<String> finishedTodos = <String>[''];
 
-  TextEditingController nameController = TextEditingController();
+  TextEditingController todoController = TextEditingController();
 
   void addItemToList() {
     setState(() {
-      names.insert(0, nameController.text);
+      todos.insert(0, todoController.text);
     });
   }
 
   void clearText() {
-    nameController.clear();
+    todoController.clear();
   }
 
   @override
@@ -51,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView.builder(
           padding: const EdgeInsets.all(8),
-          itemCount: names.length,
+          itemCount: todos.length,
           itemBuilder: (context, index) {
             if (index == 0) {
               // return the header
@@ -60,18 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             }
             index -= 1;
-            final item = names[index];
+            final item = todos[index];
             return Dismissible(
               key: Key(item),
               onDismissed: (direction) {
                 if (direction == DismissDirection.startToEnd) {
-                  print("Add to Done");
+                  finishedTodos.add(todos[index]);
                   setState(() {
-                    names.removeAt(index);
+                    todos.removeAt(index);
                   });
+                  print(finishedTodos);
                 } else {
                   setState(() {
-                    names.removeAt(index);
+                    todos.removeAt(index);
                   });
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text('$item dismissed')));
@@ -137,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextField(
-            controller: nameController,
+            controller: todoController,
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Add Item to ToDo List'),
