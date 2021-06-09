@@ -51,17 +51,21 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView.builder(
           padding: const EdgeInsets.all(8),
           itemCount: names.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              height: 50,
-              margin: EdgeInsets.all(2),
-              child: Center(
-                  child: Text(
-                '${names[index]}',
-                style: TextStyle(fontSize: 18),
-              )),
-            );
-          }),
+          itemBuilder: (context, index) {
+  final item = names[index];
+  return Dismissible(
+    key: Key(item),
+    onDismissed: (direction) {
+      setState(() {
+        names.removeAt(index);
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('$item dismissed')));
+    },
+    background: Container(color: Colors.red),
+    child: ListTile(title: Text('$item')),
+  );
+}),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
