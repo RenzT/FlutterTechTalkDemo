@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//import 'package:listview_utils/listview_utils.dart';
 
 void main() {
   runApp(MyApp());
@@ -52,16 +53,26 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(8),
           itemCount: names.length,
           itemBuilder: (context, index) {
+            if (index == 0) {
+            // return the header
+            return new Column(
+              children: [Text('Current Todos:')],
+            );
+        }
+        index -= 1;
   final item = names[index];
   return Dismissible(
     key: Key(item),
     onDismissed: (direction) {
+      if (direction == DismissDirection.startToEnd){
+        print("Add to Done");
+      } else {
       setState(() {
         names.removeAt(index);
       });
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('$item dismissed')));
-    },
+    }},
     background: Container(color: Colors.red),
     child: ListTile(title: Text('$item')),
   );
