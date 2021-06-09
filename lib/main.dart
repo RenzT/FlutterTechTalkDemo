@@ -29,8 +29,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<String> todos = <String>[''];
-  final List<String> finishedTodos = <String>[''];
+  final List<String> todos = <String>[];
+  final List<String> finishedTodos = <String>[];
 
   TextEditingController todoController = TextEditingController();
 
@@ -50,74 +50,183 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: todos.length,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              // return the header
-              return new Column(
-                children: [Text('Current Todos:')],
-              );
-            }
-            index -= 1;
-            final item = todos[index];
-            return Dismissible(
-              key: Key(item),
-              onDismissed: (direction) {
-                if (direction == DismissDirection.startToEnd) {
-                  finishedTodos.add(todos[index]);
-                  setState(() {
-                    todos.removeAt(index);
-                  });
-                  print(finishedTodos);
-                } else {
-                  setState(() {
-                    todos.removeAt(index);
-                  });
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('$item dismissed')));
-                }
-              },
-              background: new Container(
-                  padding: EdgeInsets.only(right: 20.0),
-                  color: Colors.green,
-                  child: new Align(
-                    alignment: Alignment.centerLeft,
-                    child: new Text('Add to Done',
-                        textAlign: TextAlign.right,
-                        style: new TextStyle(color: Colors.white)),
-                  )),
-              secondaryBackground: new Container(
-                padding: EdgeInsets.only(right: 20.0),
-                color: Colors.red,
-                child: Align(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        " Delete",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
+      body: Center(
+        child: Column(children: <Widget>[
+          Container(
+              height: 400,
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: todos == <String>[] ? 1 : todos.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      // return the header
+                      return new Column(
+                        children: [Text('Current Todos:')],
+                      );
+                    }
+                    index -= 1;
+                    final item = todos[index];
+                    return Dismissible(
+                      key: Key(item),
+                      onDismissed: (direction) {
+                        if (direction == DismissDirection.startToEnd) {
+                          finishedTodos.add(todos[index]);
+                          setState(() {
+                            todos.removeAt(index);
+                          });
+                        } else {
+                          setState(() {
+                            todos.removeAt(index);
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('$item dismissed')));
+                        }
+                      },
+                      background: new Container(
+                          padding: EdgeInsets.only(right: 20.0),
+                          color: Colors.green,
+                          child: Align(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Icon(
+                                Icons.check_circle_outline_rounded,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                " Add to Done",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.centerLeft,
+                        )),
+                      secondaryBackground: new Container(
+                        padding: EdgeInsets.only(right: 20.0),
+                        color: Colors.red,
+                        child: Align(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                " Delete",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                              Icon(
+                                Icons.delete_outline_rounded,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.centerRight,
                         ),
-                        textAlign: TextAlign.right,
                       ),
-                      Icon(
-                        Icons.delete_outline_rounded,
-                        color: Colors.white,
+                      child: ListTile(title: Text('$item')),
+                    );
+                  })),
+                  Container(
+                    height: 400,
+                  child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: finishedTodos == <String>[] ? 1 : finishedTodos.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      // return the header
+                      return new Column(
+                        children: [Text('Finished Todos:')],
+                      );
+                    }
+                    index -= 1;
+                    final item = finishedTodos[index];
+                    return Dismissible(
+                      key: Key(item),
+                      onDismissed: (direction) {
+                        if (direction == DismissDirection.startToEnd) {
+                          todos.add(finishedTodos[index]);
+                          setState(() {
+                            finishedTodos.removeAt(index);
+                          });
+                        } else {
+                          setState(() {
+                            finishedTodos.removeAt(index);
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('$item dismissed')));
+                        }
+                      },
+                      background: new Container(
+                          padding: EdgeInsets.only(right: 20.0),
+                          color: Colors.green,
+                         child: Align(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Icon(
+                                Icons.restore,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                " Return to ToDos",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.centerLeft,
+                        ),),
+                      secondaryBackground: new Container(
+                        padding: EdgeInsets.only(right: 20.0),
+                        color: Colors.red,
+                        child: Align(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                " Delete",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.right,
+                              ),
+                              Icon(
+                                Icons.delete_outline_rounded,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.centerRight,
+                        ),
                       ),
-                    ],
-                  ),
-                  alignment: Alignment.centerRight,
-                ),
-              ),
-              child: ListTile(title: Text('$item')),
-            );
-          }),
+                      child: ListTile(title: Text('$item')),
+                    );
+                  })
+                  )
+        ]),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
