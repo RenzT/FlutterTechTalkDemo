@@ -52,8 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(children: <Widget>[
-          Container(
-              height: 400,
+          Flexible(
               child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: todos == <String>[] ? 1 : todos.length + 1,
@@ -138,8 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: ListTile(title: Text('$item')),
                     );
                   })),
-                  Container(
-                    height: 400,
+                  Flexible(
                   child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: finishedTodos == <String>[] ? 1 : finishedTodos.length + 1,
